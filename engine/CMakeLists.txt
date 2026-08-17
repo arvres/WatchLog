@@ -3,6 +3,10 @@ add_library(WATCHLOG-engine-core
     src/parser/SSHParser.cpp
 
     src/reader/LogReader.cpp
+
+    src/detection/BruteForceRule.cpp
+
+    src/detection/DetectionEngine.cpp
 )
 
 target_include_directories(WATCHLOG-engine-core
