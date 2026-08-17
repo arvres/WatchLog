@@ -9,6 +9,8 @@ add_library(WATCHLOG-engine-core
     src/detection/DetectionEngine.cpp
 
     src/detection/PasswordSprayRule.cpp
+
+    src/alert/AlertManager.cpp
 )
 
 target_include_directories(WATCHLOG-engine-core

@@ -3,6 +3,7 @@
 #include "reader/LogReader.hpp"
 #include "detection/BruteForceRule.hpp"
 #include "detection/DetectionEngine.hpp"
+#include "alert/AlertManager.hpp"
 
 #include <iostream>
 #include <memory>
@@ -22,15 +23,19 @@ int main(int argc, char* argv[]) {
     try {
 
         LogReader reader(logFile);
+
         SSHParser parser;
 
         DetectionEngine detectionEngine;
+
+        AlertManager alertManager;
 
         detectionEngine.addRule(
             std::make_unique<BruteForceRule>(5)
         );
 
-        reader.read([&parser, &detectionEngine](const std::string& line) {
+        reader.read(
+            [&parser, &detectionEngine, &alertManager](const std::string& line) {
 
             auto event = parser.parse(line);
 
@@ -47,15 +52,8 @@ int main(int argc, char* argv[]) {
             );
 
             for (const auto& alert : alerts) {
-
-                std::cout
-                    << "[ALERT] "
-                    << alert.message
-                    << " | IP: "
-                    << alert.source_ip
-                    << " | Attempts: "
-                    << alert.event_count
-                    << '\n';
+                
+                alertManager.handle(alert);
             }
         });
 
