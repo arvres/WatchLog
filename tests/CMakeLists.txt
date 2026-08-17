@@ -3,6 +3,8 @@ add_executable(WATCHLOG-tests
     detection/BruteForceRuleTest.cpp
 
     detection/DetectionEngineTest.cpp
+
+    detection/PasswordSprayRuleTest.cpp
 )
 
 target_link_libraries(WATCHLOG-tests
