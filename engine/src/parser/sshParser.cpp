@@ -1,4 +1,4 @@
-#include "../parser/SSHParser.hpp"
+#include "parser/SSHParser.hpp"
 
 #include <regex>
 

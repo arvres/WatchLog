@@ -1,3 +1,9 @@
 testes.txt
 .vscode
 nlohmann
+
+# Pastas de compilação e executáveis
+build/
+bin/
+*.exe
+*.o

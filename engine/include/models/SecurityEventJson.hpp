@@ -2,7 +2,7 @@
 
 #include "SecurityEvent.hpp"
 
-#include <include/nlohmann/json.hpp>
+#include <nlohmann/json.hpp>
 
 inline std::string eventTypeToString(EventType type) {
 

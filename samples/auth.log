@@ -1,0 +1,8 @@
+# Sample auth.log file for testing purposes
+
+Aug 17 10:31:01 server sshd[1234]: Failed password for admin from 192.168.1.50 port 42131 ssh2
+Aug 17 10:31:02 server sshd[1234]: Failed password for admin from 192.168.1.50 port 42132 ssh2
+Aug 17 10:31:03 server sshd[1234]: Failed password for admin from 192.168.1.50 port 42133 ssh2
+Aug 17 10:31:04 server sshd[1234]: Failed password for admin from 192.168.1.50 port 42134 ssh2
+Aug 17 10:31:05 server sshd[1234]: Failed password for admin from 192.168.1.50 port 42135 ssh2
+Aug 17 10:31:06 server sshd[1234]: Accepted password for admin from 192.168.1.50 port 42136 ssh2
