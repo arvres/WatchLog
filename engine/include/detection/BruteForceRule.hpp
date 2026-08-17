@@ -22,4 +22,6 @@ private:
     int threshold;
 
     std::unordered_map<std::string, int> failedAttempts;
+
+    std::unordered_map<std::string, bool> alerted;
 };

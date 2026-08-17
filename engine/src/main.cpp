@@ -1,13 +1,16 @@
 #include "models/SecurityEventJson.hpp"
 #include "parser/SSHParser.hpp"
 #include "reader/LogReader.hpp"
+#include "detection/BruteForceRule.hpp"
+#include "detection/DetectionEngine.hpp"
 
 #include <iostream>
-#include <string>
+#include <memory>
 
 int main(int argc, char* argv[]) {
 
     if (argc != 2) {
+
         std::cerr
             << "Usage: WATCHLOG <log-file>\n";
 
@@ -21,7 +24,13 @@ int main(int argc, char* argv[]) {
         LogReader reader(logFile);
         SSHParser parser;
 
-        reader.read([&parser](const std::string& line) {
+        DetectionEngine detectionEngine;
+
+        detectionEngine.addRule(
+            std::make_unique<BruteForceRule>(5)
+        );
+
+        reader.read([&parser, &detectionEngine](const std::string& line) {
 
             auto event = parser.parse(line);
 
@@ -32,6 +41,22 @@ int main(int argc, char* argv[]) {
             std::cout
                 << toJson(event.value()).dump()
                 << '\n';
+
+            auto alerts = detectionEngine.process(
+                event.value()
+            );
+
+            for (const auto& alert : alerts) {
+
+                std::cout
+                    << "[ALERT] "
+                    << alert.message
+                    << " | IP: "
+                    << alert.source_ip
+                    << " | Attempts: "
+                    << alert.event_count
+                    << '\n';
+            }
         });
 
     } catch (const std::exception& exception) {

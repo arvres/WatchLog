@@ -24,6 +24,12 @@ std::optional<Alert> BruteForceRule::evaluate(
         return std::nullopt;
     }
 
+    if (alerted[ip]) {
+        return std::nullopt;
+    }
+
+    alerted[ip] = true;
+
     Alert alert;
 
     alert.type = AlertType::SSH_BRUTE_FORCE;

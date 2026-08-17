@@ -100,3 +100,29 @@ TEST(BruteForceRuleTest, IgnoresEventsWithoutSourceIp) {
 
     EXPECT_FALSE(alert.has_value());
 }
+
+TEST(BruteForceRuleTest, DoesNotGenerateDuplicateAlerts) {
+
+    BruteForceRule rule(5);
+
+    SecurityEvent event;
+
+    event.event_type = EventType::AUTHENTICATION_FAILURE;
+    event.source_ip = "192.168.1.50";
+    event.username = "admin";
+
+    for (int i = 0; i < 5; ++i) {
+
+        auto alert = rule.evaluate(event);
+
+        if (i < 4) {
+            EXPECT_FALSE(alert.has_value());
+        } else {
+            EXPECT_TRUE(alert.has_value());
+        }
+    }
+
+    auto duplicateAlert = rule.evaluate(event);
+
+    EXPECT_FALSE(duplicateAlert.has_value());
+}
