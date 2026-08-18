@@ -1,9 +1,9 @@
 #include "models/SecurityEventJson.hpp"
 #include "parser/SSHParser.hpp"
 #include "reader/LogReader.hpp"
-#include "detection/BruteForceRule.hpp"
 #include "detection/DetectionEngine.hpp"
 #include "alert/AlertManager.hpp"
+#include "detection/RuleRegistry.hpp"
 
 #include <iostream>
 #include <memory>
@@ -26,13 +26,11 @@ int main(int argc, char* argv[]) {
 
         SSHParser parser;
 
-        DetectionEngine detectionEngine;
+        DetectionEngine detectionEngine =
+        createDefaultDetectionEngine();
 
         AlertManager alertManager;
 
-        detectionEngine.addRule(
-            std::make_unique<BruteForceRule>(5)
-        );
 
         reader.read(
             [&parser, &detectionEngine, &alertManager](const std::string& line) {

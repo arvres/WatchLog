@@ -3,7 +3,10 @@
 void DetectionEngine::addRule(
     std::unique_ptr<DetectionRule> rule
 ) {
-    rules.push_back(std::move(rule));
+
+    rules.push_back(
+        std::move(rule)
+    );
 }
 
 std::vector<Alert> DetectionEngine::process(
@@ -17,7 +20,10 @@ std::vector<Alert> DetectionEngine::process(
         auto alert = rule->evaluate(event);
 
         if (alert.has_value()) {
-            alerts.push_back(alert.value());
+
+            alerts.push_back(
+                alert.value()
+            );
         }
     }
 
