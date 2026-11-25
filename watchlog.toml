@@ -1,0 +1,49 @@
+# WatchLog Configuration
+# Copy to /etc/watchlog/watchlog.toml or use with --config
+# All values are optional; commented lines show defaults.
+
+# =============================================================================
+# Detection Rules
+# =============================================================================
+
+[rules.brute_force]
+# Detect: N failed logins for SAME user from SAME IP within time window
+enabled = true
+threshold = 5          # Minimum failures to trigger
+window_seconds = 300   # Time window (5 minutes)
+cooldown_seconds = 300 # Silence repeat alerts for this period (default: window_seconds)
+
+[rules.password_spray]
+# Detect: N DISTINCT users targeted by SAME IP within time window
+enabled = true
+threshold = 5
+window_seconds = 300
+cooldown_seconds = 300
+
+[rules.login_after_failures]
+# Detect: Successful login from IP that recently had N failures (CRITICAL)
+enabled = true
+threshold = 5
+window_seconds = 300
+# cooldown_seconds not needed for this rule (history cleared on alert)
+
+# =============================================================================
+# Future: Alerting Sinks (not yet implemented in config)
+# =============================================================================
+
+# [alerting.sinks.stdout]
+# enabled = true
+# format = "json"  # or "text"
+# min_severity = "info"
+
+# [alerting.sinks.file]
+# enabled = false
+# path = "/var/log/watchlog/alerts.jsonl"
+# format = "json"
+# min_severity = "high"
+
+# [alerting.sinks.webhook]
+# enabled = false
+# url = "https://hooks.example.com/alerts"
+# timeout_seconds = 10
+# min_severity = "high"

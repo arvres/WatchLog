@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  watchlog:
+    build: .
+    image: watchlog:local
+    container_name: watchlog
+    restart: unless-stopped
+    user: "root:root"  # Needed to read /var/log/auth.log on host
+    volumes:
+      - /var/log:/var/log:ro
+      - ./watchlog.toml:/etc/watchlog/watchlog.toml:ro
+    command:
+      - /var/log/auth.log
+      - --follow
+      - --config
+      - /etc/watchlog/watchlog.toml
+      - --format
+      - json
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Example: Ship logs to Loki/Grafana
+  # loki:
+  #   image: grafana/loki:2.9
+  #   ports:
+  #     - "3100:3100"
+  #   volumes:
+  #     - ./loki-config.yaml:/etc/loki/local-config.yaml
+  #   depends_on:
+  #     - watchlog
+
+  # Example: Prometheus metrics exporter (if adding metrics endpoint)
+  # prometheus:
+  #   image: prom/prometheus:latest
+  #   ports:
+  #     - "9090:9090"
+  #   volumes:
+  #     - ./prometheus.yml:/etc/prometheus/prometheus.yml

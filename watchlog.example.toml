@@ -1,0 +1,18 @@
+# Exemplo de configuração. Use:  watchlog auth.log --config watchlog.toml
+# Tudo é opcional: o que não for informado usa o padrão.
+
+[rules.brute_force]          # N falhas para o MESMO usuário, vindas do MESMO IP
+enabled = true
+threshold = 5
+window_seconds = 300
+# cooldown_seconds = 300     # padrão: igual à janela
+
+[rules.password_spray]       # N usuários DISTINTOS atacados pelo mesmo IP
+enabled = true
+threshold = 5
+window_seconds = 300
+
+[rules.login_after_failures] # login bem-sucedido logo após N falhas do mesmo IP
+enabled = true
+threshold = 5
+window_seconds = 300

@@ -1,0 +1,4 @@
+# Type Path                    Mode UID      GID      Age Argument
+d     /run/watchlog             0755 watchlog watchlog -   -
+d     /var/lib/watchlog         0750 watchlog watchlog -   -
+d     /etc/watchlog             0750 root     watchlog -   -

@@ -1,0 +1,8 @@
+"""WatchLog: SSH authentication attack detector."""
+
+try:
+    from ._version import __version__
+except ImportError:
+    __version__ = "0.0.0+dev"
+
+__all__ = ["__version__"]

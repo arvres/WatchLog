@@ -1,0 +1,36 @@
+# CODEOWNERS - Automatic review assignment
+# See https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Global owners (all files)
+* @owner-username
+
+# Core detection logic - require security review
+/src/watchlog/detection/ @owner-username @security-reviewer
+
+# Parser - security sensitive (input handling)
+/src/watchlog/parsers/ @owner-username @security-reviewer
+
+# Configuration - affects behavior
+/src/watchlog/config.py @owner-username
+
+# Alerting - output handling
+/src/watchlog/alerting/ @owner-username
+
+# CLI - user-facing interface
+/src/watchlog/cli.py @owner-username
+
+# Tests - require passing for any change
+/tests/ @owner-username
+
+# CI/CD - changes affect release process
+/.github/workflows/ @owner-username @devops-reviewer
+
+# Packaging - systemd, docker
+/packaging/ @owner-username @devops-reviewer
+/Dockerfile @owner-username @devops-reviewer
+/docker-compose.yml @owner-username @devops-reviewer
+
+# Documentation
+/README.md @owner-username
+/docs/ @owner-username
+/CHANGELOG.md @owner-username

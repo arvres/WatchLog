@@ -1,0 +1,151 @@
+[build-system]
+requires = ["setuptools>=68", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "watchlog"
+description = "SSH authentication attack detector (brute force, password spray, login after failures)"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: System Administrators",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Security",
+    "Topic :: System :: Logging",
+    "Topic :: System :: Monitoring",
+    "Typing :: Typed",
+]
+dependencies = []  # Zero runtime dependencies - stdlib only
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "ruff>=0.5",
+    "mypy>=1.15",
+    "bandit>=1.8",
+    "pre-commit>=4",
+    "pytest-cov>=6",
+]
+docs = [
+    "mkdocs>=1.6",
+    "mkdocs-material>=9",
+    "mkdocstrings[python]>=0.26",
+]
+
+[project.urls]
+Homepage = "https://github.com/<owner>/watchlog"
+Repository = "https://github.com/<owner>/watchlog"
+Issues = "https://github.com/<owner>/watchlog/issues"
+Changelog = "https://github.com/<owner>/watchlog/blob/main/CHANGELOG.md"
+Documentation = "https://<owner>.github.io/watchlog/"
+
+[project.scripts]
+watchlog = "watchlog.cli:main"
+
+[project.entry-points."watchlog.parsers"]
+ssh = "watchlog.parsers.ssh:SSHParser"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools_scm]
+version_file = "src/watchlog/_version.py"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-ra --strict-markers --strict-config"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "C4", "PTH", "PL", "TRY", "TID", "ARG", "ERA", "PD", "PYI", "RSE", "RET", "SLF", "SLOT", "TCH", "INT", "LOG"]
+ignore = [
+    "SIM115",  # open() in try block - acceptable for file handles we close manually
+    "TRY003",  # Avoid specifying long messages outside the exception class - OK for CLI
+    "TCH001",  # Type checking imports - we use TYPE_CHECKING where needed
+    "TC003",   # Move imports to TYPE_CHECKING block - not needed for stdlib types used at runtime
+    "PTH123",  # open() vs Path.open() - built-in open() is fine
+    "PTH116",  # os.stat() vs Path.stat() - os.stat() is fine
+    "TRY300",  # Consider else block - current structure is clearer
+]
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = [
+    "E501",      # Long log lines
+    "S101",      # Assert in tests
+    "SLF001",    # Private access in tests
+    "PLR2004",   # Magic values in test assertions
+    "ARG001",    # Unused fixture in tests
+    "ARG002",    # Unused method arg in test mocks
+    "PTH123",    # open() vs Path.open() in tests
+    "PTH104",    # os.rename() vs Path.rename() in tests
+    "PLC0415",   # Import at top level in tests
+]
+"src/watchlog/__init__.py" = ["E501"]  # Version string slightly over 100 chars
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+show_error_codes = true
+pretty = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+strict = false
+disallow_untyped_defs = false
+
+[tool.bandit]
+targets = ["src"]
+exclude = ["tests"]
+severity-level = "low"
+confidence-level = "low"
+skip = ["B101", "B104", "B108", "B311", "B601"]  # Assert, hardcoded IP, string formatting, random, shell
+
+[tool.coverage.run]
+source = ["src/watchlog"]
+omit = ["tests/*", "*/conftest.py"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]
+show_missing = true
+precision = 2
+
+[tool.pre-commit]
+fail_fast = true
