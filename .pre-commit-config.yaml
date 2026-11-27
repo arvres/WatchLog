@@ -9,11 +9,12 @@ repos:
       - id: ruff-format
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.15.0
+    rev: v2.4.1
     hooks:
       - id: mypy
         additional_dependencies: [types-toml]
-        args: [--strict, src/watchlog]
+        args: [--strict, --config-file=pyproject.toml, -p, watchlog]
+        pass_filenames: false
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
@@ -33,6 +34,7 @@ repos:
       - id: bandit
         args: [-r, src, -ll]
         exclude: ^tests/
+        pass_filenames: false
 
   - repo: local
     hooks:
@@ -41,4 +43,4 @@ repos:
         entry: python -m pytest -x -q --tb=line tests/test_parser_ssh.py tests/test_state.py tests/test_brute_force.py tests/test_password_spray.py tests/test_login_after_failures.py
         language: system
         pass_filenames: false
-        stages: [commit]
+        stages: [pre-commit]

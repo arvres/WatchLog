@@ -40,6 +40,7 @@ Thumbs.db
 watchlog.toml.local
 .env
 .env.*
+src/watchlog/_version.py
 
 # Build artifacts
 *.so
